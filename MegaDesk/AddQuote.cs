@@ -50,42 +50,6 @@ namespace MegaDesk
                 totalPriceAmountLabel.Text = $@"${deskQuote.CalculateQuote()}";
                 shippingPriceLabel.Text = $@"${deskQuote.GetShippingPrice()}";
 
-                string quotesFile = @"quotes.txt";
-                if (!File.Exists(quotesFile))
-                {
-                    using (StreamWriter writer = File.CreateText(quotesFile))
-                    {
-                        writer.WriteLine(
-                            $"{deskQuote.QuoteDate}," +
-                            $"{deskQuote.CustomerName}," +
-                            $"{deskQuote.Desk.Width}," +
-                            $"{deskQuote.Desk.Depth}," +
-                            $"{deskQuote.Desk.NumberOfDrawers}," +
-                            $"{deskQuote.Desk.SurfaceMaterial}," +
-                            $"{deskQuote.ShippingSpeed}," +
-                            $"{deskQuote.GetShippingPrice()}," +
-                            $"{deskQuote.CalculateQuote()}");
-                        writer.Close();
-                    }
-                }
-                else
-                {
-                    using (StreamWriter writer = File.AppendText(quotesFile))
-                    {
-                        writer.WriteLine(
-                            $"{deskQuote.QuoteDate}," +
-                            $"{deskQuote.CustomerName}," +
-                            $"{deskQuote.Desk.Width}," +
-                            $"{deskQuote.Desk.Depth}," +
-                            $"{deskQuote.Desk.NumberOfDrawers}," +
-                            $"{deskQuote.Desk.SurfaceMaterial}," +
-                            $"{deskQuote.ShippingSpeed}," +
-                            $"{deskQuote.GetShippingPrice()}," +
-                            $"{deskQuote.CalculateQuote()}");
-                        writer.Close();
-                    }
-                }
-
                 DisplayQuote();
 
         }
