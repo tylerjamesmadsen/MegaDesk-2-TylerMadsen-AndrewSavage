@@ -30,8 +30,7 @@ namespace MegaDesk
 
         private void GetQuoteButton_Click(object sender, EventArgs e)
         {
-            try
-            {
+
                 Desk desk = new Desk
                 {
                     Width = (int)widthNumericUpDown.Value,
@@ -47,11 +46,6 @@ namespace MegaDesk
                     ShippingSpeed = GetRushShippingChoice(),
                     QuoteDate = DateTime.Now
                 };
-
-                if (string.IsNullOrEmpty(deskQuote.CustomerName))
-                {
-                    throw new InvalidOperationException(@"Please enter your name.");
-                }
 
                 totalPriceAmountLabel.Text = $@"${deskQuote.CalculateQuote()}";
                 shippingPriceLabel.Text = $@"${deskQuote.GetShippingPrice()}";
@@ -93,11 +87,7 @@ namespace MegaDesk
                 }
 
                 DisplayQuote();
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show(exception.Message);
-            }
+
         }
 
         private DeskQuote.RushShippingChoice GetRushShippingChoice()
