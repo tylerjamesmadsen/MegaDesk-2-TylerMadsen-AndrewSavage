@@ -15,66 +15,7 @@ namespace MegaDesk
 
         private void ReadQuotesFile()
         {
-            const string quotesFile = @"quotes.txt";
-            if (!File.Exists(quotesFile))
-            {
-                return;
-            }
-
-            StreamReader reader = new StreamReader(quotesFile);
-            try
-            {
-                bool insertRow = true;
-                for (var row = 0; !reader.EndOfStream; row++)
-                {
-                    if (insertRow == false && row != 0)
-                    {
-                        row--;
-                    }
-                    else
-                    {
-                        viewAllQuotesDataGridView.Rows.Add();
-                    }
-
-                    string quotesFileLine = reader.ReadLine();
-                    if (quotesFileLine == null)
-                    {
-                        continue;
-                    }
-
-                    string[] quotesFileLineValues = quotesFileLine.Split(',');
-
-                    if (surfaceMaterialSelectionComboBox.Text == "" ||
-                        surfaceMaterialSelectionComboBox.Text == @"*All Materials*")
-                    {
-                        for (var col = 0; col < quotesFileLineValues.Length; col++)
-                        {
-                            viewAllQuotesDataGridView.Rows[row].Cells[col].Value = quotesFileLineValues[col];
-                        }
-
-                        insertRow = true;
-                    }
-                    else if (quotesFileLineValues.Contains(surfaceMaterialSelectionComboBox.Text))
-                    {
-                        for (var col = 0; col < quotesFileLineValues.Length; col++)
-                        {
-                            viewAllQuotesDataGridView.Rows[row].Cells[col].Value = quotesFileLineValues[col];
-                        }
-
-                        insertRow = true;
-                    }
-                    else
-                    {
-                        insertRow = false;
-                    }
-                }
-                reader.Close();
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception);
-                throw;
-            }
+            
         }
 
         private void exitViewAllQuotesButton_Click(object sender, EventArgs e)
@@ -87,7 +28,6 @@ namespace MegaDesk
         private void surfaceMaterialSelectionComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             viewAllQuotesDataGridView.Rows.Clear();
-            ReadQuotesFile();
         }
     }
 }
