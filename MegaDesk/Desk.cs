@@ -1,6 +1,6 @@
 ﻿namespace MegaDesk
 {
-    class Desk
+    struct Desk
     {
         public enum DesktopSurfaceMaterial
         {

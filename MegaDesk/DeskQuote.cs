@@ -1,9 +1,26 @@
 ﻿using System;
+using System.IO;
 
 namespace MegaDesk
 {
     class DeskQuote
     {
+
+        public int[,] readTxtToArray()
+        {
+            int[,] shippingArray = new int[3, 3];
+            string[] file = File.ReadAllLines(@"rushOrderPrices.txt");
+            int temp = 0;
+            for (int r = 0; r < 3; r++)
+            {
+                for (int c = 0; c < 3; c++)
+                {
+                    shippingArray[r, c] = Int32.Parse(file[temp++]);
+                }
+            }
+            return shippingArray;
+        }
+
         public enum RushShippingChoice
         {
             Rush3Days,
@@ -103,25 +120,36 @@ namespace MegaDesk
             // check desk size
             var deskSize = GetDeskSizeIndex();
 
+            int[,] ShipTable = readTxtToArray();
+
             // check shipping speed
             switch (ShippingSpeed)
             {
                 case RushShippingChoice.Rush3Days:
-                    shippingPrice = _shippingPrice3DayRush[deskSize];
+                    if (deskSize < 1000) { shippingPrice = ShipTable[0, 0]; }
+                    else if (deskSize >= 1000 && deskSize <= 2001) { shippingPrice = ShipTable[0, 1]; }
+                    else { shippingPrice = ShipTable[0, 2]; }
                     break;
                 case RushShippingChoice.Rush5Days:
-                    shippingPrice = _shippingPrice5DayRush[deskSize];
+                    if (deskSize < 1000) { shippingPrice = ShipTable[1, 0]; }
+                    else if (deskSize >= 1000 && deskSize <= 2001) { shippingPrice = ShipTable[1, 1]; }
+                    else { shippingPrice = ShipTable[1, 2]; }
                     break;
                 case RushShippingChoice.Rush7Days:
-                    shippingPrice = _shippingPrice7DayRush[deskSize];
+                    if (deskSize < 1000) { shippingPrice = ShipTable[2, 0]; }
+                    else if (deskSize >= 1000 && deskSize <= 2001) { shippingPrice = ShipTable[2, 1]; }
+                    else { shippingPrice = ShipTable[2, 2]; }
                     break;
                 case RushShippingChoice.Standard14Days:
-                    shippingPrice = ShippingPriceStandard;
+                    if (deskSize < 1000) { shippingPrice = ShipTable[1, 2]; }
+                    else if (deskSize >= 1000 && deskSize <= 2001) { shippingPrice = ShipTable[0, 1]; }
+                    else { shippingPrice = ShipTable[0, 2]; }
                     break;
             }
 
             return shippingPrice;
         }
+
 
         private int CalculateSurfaceArea()
         {
