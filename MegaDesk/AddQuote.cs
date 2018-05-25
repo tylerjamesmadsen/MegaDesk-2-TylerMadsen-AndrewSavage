@@ -55,7 +55,6 @@ namespace MegaDesk
                 WriteQuoteToFile(deskQuote);
 
                 DisplayQuote();
-
         }
 
         private DeskQuote.RushShippingChoice GetRushShippingChoice()
@@ -103,11 +102,23 @@ namespace MegaDesk
 
         private void WriteQuoteToFile(DeskQuote deskQuote)
         {
-            string jsonFile = @"quotes.json";
-            using (StreamWriter writer = new StreamWriter(jsonFile, true))
+            string quotesFile = @"quotes.json";
+            string quotes;
+
+            List<DeskQuote> deskQuotes = new List<DeskQuote>();
+            using (StreamReader reader = new StreamReader(quotesFile))
+            {
+                quotes = reader.ReadToEnd();
+            }
+
+            deskQuotes = JsonConvert.DeserializeObject<List<DeskQuote>>(quotes);
+            deskQuotes.Add(deskQuote);
+            var convertedJson = JsonConvert.SerializeObject(deskQuotes, Formatting.Indented);
+
+            using (StreamWriter writer = new StreamWriter(quotesFile))
             {
                 JsonSerializer serializer = new JsonSerializer();
-                serializer.Serialize(writer, deskQuote);
+                serializer.Serialize(writer, deskQuotes);
             }
         }
     }

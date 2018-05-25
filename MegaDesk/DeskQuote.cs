@@ -29,7 +29,7 @@ namespace MegaDesk
             Standard14Days
         }
 
-        // shipping speed constant strings
+        // shipping speed strings
         public static readonly string[] ShippingSpeeds = {
             "Rush - 3 Days", // 0
             "Rush - 5 Days", // 1
@@ -48,9 +48,6 @@ namespace MegaDesk
         private const decimal ShippingPriceStandard = 0.00M;
 
         // shipping price index order: {small desk, medium desk, large desk}
-        private readonly decimal[] _shippingPrice3DayRush = { 60.00M, 70.00M, 80.00M };
-        private readonly decimal[] _shippingPrice5DayRush = { 40.00M, 50.00M, 60.00M };
-        private readonly decimal[] _shippingPrice7DayRush = { 30.00M, 35.00M, 40.00M };
         private const int MediumDesk = 1000;
         private const int LargeDesk = 2001;
 
@@ -130,23 +127,21 @@ namespace MegaDesk
             {
                 case RushShippingChoice.Rush3Days:
                     if (deskSize < 1000) { shippingPrice = ShipTable[0, 0]; }
-                    else if (deskSize >= 1000 && deskSize <= 2001) { shippingPrice = ShipTable[0, 1]; }
+                    else if (deskSize >= 1000 && deskSize < 2001) { shippingPrice = ShipTable[0, 1]; }
                     else { shippingPrice = ShipTable[0, 2]; }
                     break;
                 case RushShippingChoice.Rush5Days:
                     if (deskSize < 1000) { shippingPrice = ShipTable[1, 0]; }
-                    else if (deskSize >= 1000 && deskSize <= 2001) { shippingPrice = ShipTable[1, 1]; }
+                    else if (deskSize >= 1000 && deskSize < 2001) { shippingPrice = ShipTable[1, 1]; }
                     else { shippingPrice = ShipTable[1, 2]; }
                     break;
                 case RushShippingChoice.Rush7Days:
                     if (deskSize < 1000) { shippingPrice = ShipTable[2, 0]; }
-                    else if (deskSize >= 1000 && deskSize <= 2001) { shippingPrice = ShipTable[2, 1]; }
+                    else if (deskSize >= 1000 && deskSize < 2001) { shippingPrice = ShipTable[2, 1]; }
                     else { shippingPrice = ShipTable[2, 2]; }
                     break;
                 case RushShippingChoice.Standard14Days:
-                    if (deskSize < 1000) { shippingPrice = ShipTable[1, 2]; }
-                    else if (deskSize >= 1000 && deskSize <= 2001) { shippingPrice = ShipTable[0, 1]; }
-                    else { shippingPrice = ShipTable[0, 2]; }
+                    shippingPrice = ShippingPriceStandard;
                     break;
             }
 

@@ -12,7 +12,31 @@ namespace MegaDesk
         public ViewAllQuotes()
         {
             InitializeComponent();
-            
+            LoadQuotesGrid();
+        }
+
+        private void LoadQuotesGrid()
+        {
+            var quotesFile = @"quotes.json";
+
+            using (StreamReader reader = new StreamReader(quotesFile))
+            {
+                string quotes = reader.ReadToEnd();
+                List<DeskQuote> deskQuotes = JsonConvert.DeserializeObject<List<DeskQuote>>(quotes);
+
+                viewAllQuotesDataGridView.DataSource = deskQuotes.Select(d => new
+                {
+                    Date = d.QuoteDate,
+                    Name = d.CustomerName,
+                    Width = d.Desk.Width,
+                    Depth = d.Desk.Depth,
+                    NumDrawers = d.Desk.NumberOfDrawers,
+                    SurfaceMaterial = d.Desk.SurfaceMaterial,
+                    ShippingSpeed = d.ShippingSpeed,
+                    TotalPrice = d.QuotePrice
+                })
+                .ToList();
+            }
         }
 
         private void LoadQuotesGrid(Desk.DesktopSurfaceMaterial desktopSurfaceMaterial)
@@ -27,16 +51,34 @@ namespace MegaDesk
                 viewAllQuotesDataGridView.DataSource = deskQuotes.Select(d => new
                 {
                     Date = d.QuoteDate,
-                    Customer = d.CustomerName,
-                    Depth = d.Desk.Depth,
+                    Name = d.CustomerName,
                     Width = d.Desk.Width,
-                    Drawers = d.Desk.NumberOfDrawers,
+                    Depth = d.Desk.Depth,
+                    NumDrawers = d.Desk.NumberOfDrawers,
                     SurfaceMaterial = d.Desk.SurfaceMaterial,
                     ShippingSpeed = d.ShippingSpeed,
-                    QuotePrice = d.QuotePrice
+                    TotalPrice = d.QuotePrice
                 })
                 .Where(d => d.SurfaceMaterial == desktopSurfaceMaterial)
                 .ToList();
+            }
+        }
+
+        private void surfaceMaterialSelectionComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox combo = (ComboBox)sender;
+            string selectedItem = combo.SelectedItem.ToString();
+            if (Enum.IsDefined(typeof(Desk.DesktopSurfaceMaterial), selectedItem))
+            {
+                Desk.DesktopSurfaceMaterial selection =
+                    (Desk.DesktopSurfaceMaterial)Enum
+                    .Parse(typeof(Desk.DesktopSurfaceMaterial)
+                    , selectedItem);
+                LoadQuotesGrid(selection);
+            }
+            else
+            {
+                LoadQuotesGrid();
             }
         }
 
@@ -45,15 +87,6 @@ namespace MegaDesk
             var mainMenu = (MainMenu)Tag;
             mainMenu.Show();
             Close();
-        }
-
-        private void surfaceMaterialSelectionComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            viewAllQuotesDataGridView.Rows.Clear();
-            ComboBox combo = (ComboBox)sender;
-            string selectedItem = combo.SelectedItem.ToString();
-            Desk.DesktopSurfaceMaterial selectedMaterial = (Desk.DesktopSurfaceMaterial)Enum.Parse(typeof(Desk.DesktopSurfaceMaterial), selectedItem);
-            LoadQuotesGrid(selectedMaterial);
         }
     }
 }
