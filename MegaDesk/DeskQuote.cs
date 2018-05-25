@@ -59,6 +59,7 @@ namespace MegaDesk
         public string CustomerName { get; set; }
         public RushShippingChoice ShippingSpeed { get; set; }
         public DateTime QuoteDate { get; set; }
+        public decimal QuotePrice { get; set; }
 
         // methods
         public decimal CalculateQuote()
@@ -68,6 +69,8 @@ namespace MegaDesk
             totalPrice += CalculatePriceOfDrawers();
             totalPrice += GetSurfaceMaterialPrice();
             totalPrice += GetShippingPrice();
+
+            QuotePrice = totalPrice;
 
             return totalPrice;
         }

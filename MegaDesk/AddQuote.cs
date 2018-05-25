@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using System.IO;
+using Newtonsoft;
+using Newtonsoft.Json;
 
 namespace MegaDesk
 {
@@ -50,6 +52,8 @@ namespace MegaDesk
                 totalPriceAmountLabel.Text = $@"${deskQuote.CalculateQuote()}";
                 shippingPriceLabel.Text = $@"${deskQuote.GetShippingPrice()}";
 
+                WriteQuoteToFile(deskQuote);
+
                 DisplayQuote();
 
         }
@@ -95,6 +99,16 @@ namespace MegaDesk
 
             // change text of cancel button to "Main Menu"
             cancelQuoteButton.Text = @"Main Menu";
+        }
+
+        private void WriteQuoteToFile(DeskQuote deskQuote)
+        {
+            string jsonFile = @"quotes.json";
+            using (StreamWriter writer = new StreamWriter(jsonFile, true))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                serializer.Serialize(writer, deskQuote);
+            }
         }
     }
 }
