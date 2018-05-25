@@ -106,12 +106,14 @@ namespace MegaDesk
             string quotes;
 
             List<DeskQuote> deskQuotes = new List<DeskQuote>();
-            using (StreamReader reader = new StreamReader(quotesFile))
+            if (File.Exists(quotesFile))
             {
-                quotes = reader.ReadToEnd();
+                using (StreamReader reader = new StreamReader(quotesFile))
+                {
+                    quotes = reader.ReadToEnd();
+                }
+                deskQuotes = JsonConvert.DeserializeObject<List<DeskQuote>>(quotes);
             }
-
-            deskQuotes = JsonConvert.DeserializeObject<List<DeskQuote>>(quotes);
             deskQuotes.Add(deskQuote);
             var convertedJson = JsonConvert.SerializeObject(deskQuotes, Formatting.Indented);
 

@@ -19,6 +19,11 @@ namespace MegaDesk
         {
             var quotesFile = @"quotes.json";
 
+            if (!File.Exists(quotesFile))
+            {
+                return;
+            }
+
             using (StreamReader reader = new StreamReader(quotesFile))
             {
                 string quotes = reader.ReadToEnd();
